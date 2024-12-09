@@ -1,6 +1,6 @@
 # Sea Surface Temperature
 
-With this web applications you can visualize and find patterns in the global nighttime sea surface temperature for the past 40 years.
+Web application to visualize and find patterns in the global sea surface temperature for the past 40 years.
 
 [View it live](https://geoxc-apps2.bd.esri.com/LivingAtlas/SeaSurfaceTemperature/index.html)
 
