@@ -49,8 +49,3 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 A copy of the license is available in the repository's [license.txt](./LICENSE.txt) file.
-
-## Contact
-
-Application created by John Grayson and maintained by [Raluca Nicola](rnicola@esri.com) \
-For more demos see: [Application Prototype Lab](https://apl.esri.com/)
