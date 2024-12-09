@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,minimum-scale=1.0 maximum-scale=1.0"
+    />
+    <!-- ICON -->
+    <link
+      rel="icon"
+      href="./assets/favicon.ico"
+      sizes="32x32"
+      type="image/vnd.microsoft.icon"
+    />
+    <!-- TITLE -->
+    <title class="application-title"></title>
+    <!-- META -->
+    <!--<meta property="og:title" content="">-->
+    <!--<meta property="og:description" content="">-->
+    <!--<meta property="og:url" content="https://geoxc-apps.bd.esri.com/.../index.html">-->
+    <!--<meta property="og:image" content="https://geoxc-apps.bd.esri.com/.../assets/app.png">-->
+
+    <!-- CHARTJS -- https://www.chartjs.org/ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline/dist/chartjs-plugin-trendline.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline@2.1.3/src/chartjs-plugin-trendline.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.3.0"></script>
+
+    <!-- CALCITE -->
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/2.10.1/calcite.esm.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://js.arcgis.com/calcite-components/2.10.1/calcite.css"
+    />
+
+    <!-- ArcGIS API for JavaScript-->
+    <link
+      href="https://js.arcgis.com/4.31/@arcgis/core/assets/esri/themes/dark/main.css"
+      rel="stylesheet"
+    />
+    <script src="https://js.arcgis.com/4.31/"></script>
+
+    <!-- APPLICATION -->
+    <link rel="stylesheet" type="text/css" href="./css/application.css" />
+    <script type="module" src="./js/Application.js"></script>
+  </head>
+  <body class="calcite-mode-dark">
+    <calcite-shell>
+      <!-- HEADER -->
+      <calcite-navigation slot="header">
+        <!-- TITLE AND SNIPPET -->
+        <calcite-navigation-logo
+          slot="logo"
+          icon="activity-monitor"
+          heading="Application Title"
+          description="application description"
+        ></calcite-navigation-logo>
+
+        <calcite-segmented-control
+          id="variable-option"
+          slot="content-center"
+          scale="m"
+        >
+          <calcite-segmented-control-item value="sst" checked
+            >Temperature</calcite-segmented-control-item
+          >
+          <calcite-segmented-control-item value="ssta"
+            >Anomaly</calcite-segmented-control-item
+          >
+        </calcite-segmented-control>
+
+        <!-- SHARE AND INFO ACTIONS -->
+        <div slot="content-end">
+          <!--<calcite-action slot="content-end" id="app-share-action" appearance="transparent" scale="m" title="share current options..." text="share current options" icon="link"></calcite-action>-->
+          <!--<calcite-icon id="app-howto-icon" scale="s" title="how to use..." icon="question"></calcite-icon>-->
+
+          <calcite-action
+            id="app-howto-action"
+            icon="question"
+            text="How To"
+            text-enabled
+            close-on-click
+            appearance="transparent"
+          ></calcite-action>
+          <calcite-tooltip
+            id="app-howto-tooltip"
+            reference-element="app-howto-action"
+            close-on-click
+            overlay-positioning="fixed"
+            placement="bottom-start"
+            open
+          >
+            <div>How To Use</div>
+            <ul>
+              <li>click on the map to change location</li>
+              <li>click on daily chart to change day</li>
+              <li>click on yearly chart to change year</li>
+            </ul>
+          </calcite-tooltip>
+          <calcite-action
+            id="app-details-action"
+            appearance="transparent"
+            scale="m"
+            title="app details..."
+            text="app details"
+            icon="information"
+          ></calcite-action>
+        </div>
+        <!-- SIGN IN-->
+        <!--<div id="sign-in-container" slot="user"></div>-->
+      </calcite-navigation>
+
+      <!-- LEFT -->
+      <calcite-shell-panel
+        slot="panel-start"
+        position="start"
+        width-scale="m"
+        collapsed="true"
+        hidden
+      >
+        <calcite-action-bar id="side-panel-action-bar" slot="action-bar">
+          <calcite-action
+            text="Layers"
+            title="map"
+            icon="map"
+            class="toggle-action"
+            data-toggle="map"
+          ></calcite-action>
+        </calcite-action-bar>
+
+        <calcite-panel heading="Map" class="toggle-panel" data-toggle="map">
+          <calcite-button
+            id="map-action"
+            target="_blank"
+            slot="header-actions-end"
+            appearance="transparent"
+            icon-end="launch"
+            title="view map item..."
+          ></calcite-button>
+          <calcite-block heading="Layers" collapsible open>
+            <calcite-icon slot="icon" icon="layers"></calcite-icon>
+            <div id="layers-container"></div>
+          </calcite-block>
+        </calcite-panel>
+      </calcite-shell-panel>
+
+      <!-- CENTER -->
+      <calcite-panel id="center-container">
+        <div id="view-container"></div>
+      </calcite-panel>
+
+      <!-- RIGHT -->
+      <calcite-shell-panel
+        id="temperature-panel"
+        slot="panel-start"
+        position="start"
+        width-scale="l"
+      >
+        <calcite-panel
+          id="temperature-block"
+          heading="Sea Surface Temperatures"
+          description="current location"
+        >
+          <calcite-chip
+            id="temperature-label"
+            slot="header-actions-end"
+            kind="inverse"
+            appearance="outline-fill"
+            scale="l"
+            >0 °C</calcite-chip
+          >
+
+          <calcite-card style="margin: 8px 16px">
+            <div id="animate-parent-container">
+              <calcite-button
+                id="prev-year-btn"
+                icon-start="chevrons-left"
+                kind="neutral"
+                scale="m"
+                round
+                disabled
+                >----</calcite-button
+              >
+
+              <div id="animate-container">
+                <calcite-button
+                  id="first-btn"
+                  title="first day"
+                  icon-start="beginning-f"
+                  kind="neutral"
+                  round
+                  scale="m"
+                  disabled
+                ></calcite-button>
+                <calcite-button
+                  id="prev-btn"
+                  title="previous day"
+                  icon-start="reverse-f"
+                  kind="neutral"
+                  round
+                  scale="m"
+                  disabled
+                ></calcite-button>
+                <calcite-button
+                  id="play-btn"
+                  title="play / pause"
+                  icon-start="play-f"
+                  kind="neutral"
+                  round
+                  scale="l"
+                  disabled
+                ></calcite-button>
+                <calcite-button
+                  id="next-btn"
+                  title="next day"
+                  icon-start="forward-f"
+                  kind="neutral"
+                  round
+                  scale="m"
+                  disabled
+                ></calcite-button>
+                <calcite-button
+                  id="last-btn"
+                  title="most recent day"
+                  icon-start="end-f"
+                  kind="neutral"
+                  round
+                  scale="m"
+                  disabled
+                ></calcite-button>
+              </div>
+
+              <calcite-button
+                id="next-year-btn"
+                icon-end="chevrons-right"
+                kind="neutral"
+                scale="m"
+                round
+                disabled
+                >----</calcite-button
+              >
+            </div>
+          </calcite-card>
+
+          <div class="chart-parent-container">
+            <canvas id="daily-chart-container"></canvas>
+          </div>
+
+          <div class="chart-parent-container">
+            <canvas id="yearly-chart-container"></canvas>
+          </div>
+
+          <div id="variance-container" slot="footer">
+            <div id="variance-label"></div>
+          </div>
+        </calcite-panel>
+      </calcite-shell-panel>
+
+      <calcite-block
+        slot="panel-bottom"
+        heading="Temperature Profile"
+        description="use the sketch tool to define a profile path"
+        collapsible
+        style="margin: 0"
+        hidden
+      >
+        <calcite-action
+          id="sketch-profile-action"
+          slot="actions-end"
+          icon="graph-line-series"
+          title="Click on two points in the map to define the start and end locations of the profile path..."
+          disabled
+        ></calcite-action>
+        <!--<calcite-tooltip reference-element="sketch-profile-action" overlay-position="fixed">
+          Click on two points in the map to define the start and end locations of the profile path...
+        </calcite-tooltip>-->
+        <div class="chart-parent-container">
+          <canvas id="profile-chart-container"></canvas>
+        </div>
+      </calcite-block>
+
+      <!-- SHAREABLE ALERT -->
+      <calcite-alert
+        id="app-share-alert"
+        slot="alerts"
+        kind="success"
+        icon="launch"
+        placement="bottom"
+        auto-close
+        auto-close-duration="medium"
+      >
+        <div slot="message">
+          Shareable link has been copied to the clipboard.
+        </div>
+        <calcite-link
+          slot="link"
+          href="#"
+          target="_blank"
+          role="link"
+          title="open in new tab"
+          >open in new tab</calcite-link
+        >
+      </calcite-alert>
+
+      <!-- NOTICES ADN ALERTS -->
+      <calcite-alert
+        id="app-notice"
+        slot="alerts"
+        kind="danger"
+        placement="bottom"
+        width="auto"
+      >
+        <div slot="title"></div>
+        <div slot="message"></div>
+      </calcite-alert>
+
+      <!-- APP DETAILS MODAL -->
+      <calcite-modal
+        id="app-details-modal"
+        slot="modals"
+        kind="brand"
+        scale="m"
+        width="m"
+        aria-labelledby="app-modal-title"
+      >
+        <h3 slot="header" id="app-modal-title" class="application-title"></h3>
+        <div slot="content" class="application-description"></div>
+        <div slot="secondary">
+          <calcite-label layout="inline">
+            <span>hide on startup</span>
+            <calcite-checkbox id="hide-startup-checkbox"></calcite-checkbox>
+          </calcite-label>
+        </div>
+        <calcite-button
+          id="app-details-ok-btn"
+          slot="primary"
+          width="full"
+          hidden
+          >OK</calcite-button
+        >
+      </calcite-modal>
+    </calcite-shell>
+
+    <!-- LOADER -->
+    <calcite-loader
+      id="app-loader"
+      type="indeterminate"
+      scale="l"
+      text="...loading..."
+    ></calcite-loader>
+  </body>
+</html>

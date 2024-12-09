@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function loadHandler() {
+        if (opener) {
+          if (location.hash) {
+            // opener.console.log("oauth callback href:", location.href);
+            if (typeof opener.require === "function" && opener.require("esri/kernel")) {
+              opener.require("esri/kernel").id.setOAuthResponseHash(location.hash);
+            } else {
+              opener.dispatchEvent(new CustomEvent("arcgis:auth:hash", { detail: location.hash }));
+            }
+            close();
+          } else if (location.search) {
+            opener.dispatchEvent(new CustomEvent("arcgis:auth:location:search", { detail: location.search }));
+            close();
+          }
+        } else {
+          close();
+        }
+      }
+    </script>
+  </head>
+  <body onload="loadHandler();"></body>
+</html>
+
+
+/*this.getRandomDays = () => {
+
+     const startTimestamp = Date.UTC(this.settings.currentYear, 0, 1, 0, 0, 0, 0);
+     const endTimestamp = Date.UTC(this.settings.currentYear, 11, 31, 0, 0, 0, 0);
+
+     const randomTimestamps = [];
+     do {
+
+     const randomTime = startTimestamp + ((endTimestamp - startTimestamp) * Math.random());
+     const randomDate = new Date(randomTime);
+     const randomTimestamp = Date.UTC(this.settings.currentYear, randomDate.getUTCMonth(), randomDate.getUTCDate(), 0, 0, 0, 0);
+
+     randomTimestamps.push(randomTimestamp);
+
+     } while (randomTimestamps.length < 100);
+
+     return randomTimestamps;
+     };*/
+
+       /*let _animationHandle;
+          this.stopWaitAnimation = () => {
+          _animationHandle && clearInterval(_animationHandle);
+          _animationHandle = null;
+          this.updateDailyTempChart({});
+          };
+
+          this.startWaitAnimation = () => {
+          _animationHandle = setInterval(() => {
+          this.updateDailyTempChart({dataAtLocation: this.fillMissingDays([], this.getRandomDays())});
+          }, 1000);
+          };*/
+
+// YEAR SLIDER //
+    /*
+     const yearSlider = document.createElement('calcite-slider');
+     yearSlider.setAttribute('id', 'year-slider');
+     yearSlider.setAttribute('min', '1985');
+     yearSlider.setAttribute('max', this.settings.currentYear);
+     yearSlider.setAttribute('value', this.settings.currentYear);
+     yearSlider.setAttribute('ticks', '5');
+     yearSlider.setAttribute('page-step', '10');
+     yearSlider.setAttribute('scale', 's');
+     yearSlider.toggleAttribute('snap', true);
+     yearSlider.toggleAttribute('label-handles', true);
+     yearSlider.toggleAttribute('label-ticks', true);
+     yearSlider.addEventListener('calciteSliderChange', () => {
+     this.dispatchEvent(new CustomEvent('year-change', ({detail: {year: Number(yearSlider.value)}})));
+     });
+     this.addEventListener('year-change', ({detail: {year}}) => {
+     yearSlider.setAttribute('value', year);
+     });
+     const yearContainer = document.getElementById('year-container');
+     yearContainer.append(yearSlider);
+     */
+
+/**
+     *
+     * @param location
+     * @param signal
+     * @return {Promise<unknown>}
+     */
+    /*this.getMonthlyDataAtLocation = ({location, signal: signal}) => {
+     return new Promise((resolve, reject) => {
+
+     const startYear = this.settings.yearsExtent.at(0);
+     const endYear = this.settings.yearsExtent.at(1);
+
+     const monthlySlices = [];
+     for (let year = startYear; year <= endYear; year++) {
+     for (let month = 0; month <= 11; month++) {
+     const firstOfMonthTimestamp = Date.UTC(year, month, 1, 12, 0, 0, 0);
+     const lastOfMonthTimestamp = Date.UTC(year, month + 1, 0, 12, 0, 0, 0);
+
+     if ((firstOfMonthTimestamp < lastTimestamp) && (lastOfMonthTimestamp < lastTimestamp)) {
+     monthlySlices.push([firstOfMonthTimestamp, lastOfMonthTimestamp]);
+     }
+     //console.info(new Date(monthlySlices.at(-1).at(0)).toISOString(),new Date(monthlySlices.at(-1).at(1)).toISOString())
+     }
+     }
+
+     sstLayer.getSamples({
+     geometry: location,
+     returnFirstValueOnly: false,
+     interpolation: 'nearest',
+     pixelSize: rasterInfo.pixelSize,
+     mosaicRule: {
+     operation: 'mean',
+     multidimensionalDefinition: [
+     {
+     variableName: sstVariable.name,
+     dimensionName: timeDimension.name,
+     isSlice: false,
+     values: monthlySlices
+     }
+     ]
+     }
+     }, {signal: signal}).then(({samples}) => {
+
+     console.info(samples);
+
+     /!*let dataAtLocation = samples.reduce((infos, sample) => {
+
+     const stdTime = sample.attributes.StdTime;
+     const day = new Date(stdTime);
+     const iso = day.toISOString().substr(0, 10);
+     const diff = Math.abs(this.settings.currentDate.valueOf() - day.valueOf());
+
+     const alert = sample.attributes.alert?.length ? Number(sample.attributes.alert) : Number.NaN;
+     const temp = sample.attributes.sst?.length ? Number(sample.attributes.sst) : Number.NaN;
+
+     return infos.concat({
+     x: iso,
+     y: isoDayOfWeek(day),
+     date: day,
+     year: String(day.getUTCFullYear()),
+     label: this.dateFormatter.format(day),
+     diff: diff,
+     temp: temp,
+     alert: alert
+     });
+     }, []);*!/
+
+     //console.info(samples, dataAtLocation);
+     resolve({dataAtLocation: []});
+     }).catch(reject);
+
+     });
+     };*/
+
+
+     //
+             // DAILY //
+             //
+             // dailyAbortController.abort();
+             // dailyAbortController = new AbortController();
+
+             /*this.getDailyDataAtLocation({location: _analysisLocation, signal: dailyAbortController.signal}).then(({dataAtLocation}) => {
+              if (!dailyAbortController.signal.aborted && dataAtLocation) {
+
+              const current = dataAtLocation.find(data => data.diff === 0);
+              const alert = current?.alert;
+              const temp = current?.temp;
+              const valueLabel = temp ? `${ temp.toFixed(1) } °C` : 'No Data';
+
+              this.updateDailyTempChart({location: _mapLocation, dataAtLocation});
+              _updateAnalysisLocation({location: _mapLocation, valueLabel, alert});
+              } else {
+              this.updateDailyTempChart({});
+              _updateAnalysisLocation({});
+              }
+              }).catch(error => {
+              this.updateDailyTempChart({});
+              _updateAnalysisLocation({});
+              });*/
+
+             //
+             // MONTHLY //
+             //
+             /*monthlyAbortController.abort();
+              monthlyAbortController = new AbortController();
+              this.getMonthlyDataAtLocation({location: _analysisLocation, signal: monthlyAbortController.signal}).then(({dataAtLocation}) => {
+              if (!monthlyAbortController.signal.aborted && dataAtLocation) {
+              /!* ... *!/
+              } else {
+              /!* ... *!/
+              }
+              }).catch(error => {
+              /!* ... *!/
+              });*/
+
+             //
+             // YEARLY //
+             //
+             // yearlyAbortController.abort();
+             // yearlyAbortController = new AbortController();
+
+             /*this.getYearlyDataAtLocation({location: _analysisLocation, signal: yearlyAbortController.signal}).then(({dataAtLocation}) => {
+              if (!yearlyAbortController.signal.aborted && dataAtLocation) {
+              this.updateYearlyTempChart({location: _mapLocation, dataAtLocation});
+              } else {
+              this.updateYearlyTempChart({});
+              }
+              }).catch(error => {
+              this.updateYearlyTempChart({});
+              });*/

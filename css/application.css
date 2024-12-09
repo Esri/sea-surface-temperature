@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--calcite-color-background);
+}
+
+/* Calcite Theme Editor: https://esrips.github.io/calcite-theme-editor/ */
+
+.calcite-mode-dark {
+  color-scheme: dark;
+  --calcite-mode-name: dark;
+  --calcite-color-brand: #C77A41;
+  --calcite-color-brand-hover: #995B2D;
+  --calcite-color-brand-press: #7F4C26;
+  --calcite-color-text-1: #efefef;
+  --calcite-color-text-2: #dedede;
+  --calcite-color-text-3: #cecece;
+  --calcite-ui-text-highlight: #C77A41;
+  --calcite-color-text-inverse: #000000;
+  --calcite-color-text-link: #995B2D;
+  --calcite-link-blue-underline: rgba(199, 122, 65, 0.5);
+  --calcite-color-background: #222C49;
+  --calcite-color-foreground-1: #1C243B;
+  --calcite-color-foreground-2: #151B2C;
+  --calcite-color-foreground-3: #0D101B;
+  --calcite-color-inverse: #E3DBC4;
+  --calcite-color-inverse-hover: #C8B88B;
+  --calcite-color-inverse-press: #AC9552;
+  --calcite-color-border-1: #38302B;
+  --calcite-color-border-2: #3E352F;
+  --calcite-color-border-3: #433A34;
+  --calcite-color-border-input: #493E38;
+  --calcite-ui-icon-color: currentColor;
+  --calcite-color-status-info: #995B2D;
+  --calcite-color-status-success: #36DA43;
+  --calcite-color-status-warning: #FFC900;
+  --calcite-color-status-danger: #FE583E;
+  --calcite-color-status-danger-hover: #FF0015;
+  --calcite-color-status-danger-press: #D90012;
+}
+
+
+.esri-widget,
+.esri-search {
+  color: var(--calcite-color-text-2);
+  background-color: var(--calcite-color-foreground-1);
+}
+
+.esri-input,
+.esri-menu {
+  color: var(--calcite-color-text-2);
+  background-color: var(--calcite-color-background);
+}
+
+.esri-menu__list-item--focus,
+.esri-menu__list-item:hover,
+.esri-menu__list-item:focus {
+  background-color: var(--calcite-color-foreground-1);
+}
+
+.esri-widget--button {
+  color: var(--calcite-color-text-1);
+  background-color: var(--calcite-color-foreground-3);
+}
+
+.esri-legend {
+  width: unset !important;
+}
+
+calcite-shell[content-behind] #center-container {
+  padding-left: 50px;
+}
+
+calcite-navigation[slot="header"] {
+  --calcite-navigation-border-color: var(--calcite-color-brand);
+}
+
+calcite-navigation[slot="header"] [slot] {
+  margin: 0 0.2rem;
+}
+
+calcite-navigation[slot="header"] calcite-action[slot="navigation-action"]:first-of-type {
+  margin-left: 1rem;
+  pointer-events: none;
+}
+
+calcite-navigation[slot="header"] calcite-navigation-logo {
+  pointer-events: none;
+  --calcite-color-text-1: var(--calcite-color-brand);
+  --calcite-font-size-0: 15pt;
+}
+
+calcite-navigation calcite-action[slot="navigation-action"] {
+  --calcite-color-icon-color: var(--calcite-color-brand);
+}
+
+calcite-loader#app-loader {
+  --calcite-loader-size: 8rem;
+  align-self: center;
+  justify-self: center;
+}
+
+calcite-modal {
+  --calcite-modal-content-background: var(--calcite-color-background);
+}
+
+calcite-modal [slot="secondary"] calcite-label {
+  --calcite-label-margin-bottom: 0;
+}
+
+calcite-list-item {
+  --calcite-color-text-1: var(--calcite-color-brand);
+}
+
+#center-container {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#view-container {
+  padding: 0;
+  margin: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#view-container canvas {
+  filter: drop-shadow(2px 2px 1px var(--calcite-color-background)) drop-shadow(0 0 100px var(--calcite-color-brand));
+}
+
+#temperature-panel {
+  --calcite-shell-panel-min-width: 400px;
+  --calcite-shell-panel-max-width: 650px;
+}
+
+.chart-parent-container {
+  min-height: 0;
+  flex: 1 1 0;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#daily-chart-container,
+#yearly-chart-container,
+#profile-chart-container {
+  flex: 1 1 auto;
+}
+
+#profile-chart-container {
+  min-height: 0;
+  max-height: 180px;
+}
+
+#animate-parent-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+#animate-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+#bleaching-container {
+  --calcite-label-margin-bottom: 0;
+}
+
+#variance-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.5rem;
+}
+
+[slot="header-actions-end"] {
+  margin: auto 0.5rem;
+}
+
+#temperature-label.alert {
+  --calcite-color-border-inverse: crimson;
+}
+
+calcite-segmented-control-item[checked] {
+  --calcite-color-text-inverse: var(--calcite-color-text-1);
+}
+
